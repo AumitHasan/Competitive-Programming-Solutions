@@ -1,0 +1,93 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int d8x[]={-1,-1,0,1,1,1,0,-1};
+int d8y[]={0,1,1,1,0,-1,-1,-1};
+#define ll long long int
+#define llu unsigned long long int
+#define mem(a,b) memset(a,b,sizeof(a))
+#define pr pair<int,int>
+#define READ(f) freopen(f,"r",stdin)
+#define WRITE(f) freopen(f,"w",stdout)
+#define pii 2.0*acos(0.0)
+#define MOD 1000000007
+#define MAX 1007
+#define int_map map<int,int>
+#define v_map map<int,vector<int> >
+#define long_map map<long long,long long>
+#define IO ios::sync_with_stdio(false)
+#define inputline(a) getline(cin,a)
+#define INF (1LL<<31)-1
+//int gcd(int x,int y){return (y==0)?x:gcd(y,x%y);};
+#define gcd(a,b) __gcd(a,b)
+
+string F[509];
+
+
+string fibs(string str,string ch)
+{
+    string new_str;
+    int a,b,sum=0,carry=0;
+    reverse(str.begin(),str.end());
+    reverse(ch.begin(),ch.end());
+    int len1=str.length(),len2=ch.length();
+    for(int i=0;i<max(len1,len2);i++){
+        if(i<len1) sum += str[i]-'0';
+        if(i<len2) sum += ch[i]-'0';
+
+        new_str += (sum%10 + '0');
+        sum /=  10;
+    }
+    if(sum>0) new_str += sum+'0';
+
+    reverse(new_str.begin(),new_str.end());
+    return new_str;
+}
+int check(string str,string fb)
+{
+    //cout<<"S: "<<str<<" "<<fb<<endl;
+    int a = str.length();
+    int b = fb.length();
+
+    if(a>b) return 1;
+    if(a<b) return 0;
+    if(str==fb){
+        //cout<<"same"<<endl;
+        return 2;
+    }
+    for(int i=0;i<a;i++){
+        if(str[i]>fb[i]) return 1;
+        else if(str[i]<fb[i]) return 0;
+    }
+}
+int main()
+{
+
+    F[0] = "0";
+    F[1] = "1";
+    F[2] = "2";
+    for(int i=3;i<=505;i++){
+        F[i] = fibs(F[i-1],F[i-2]);
+    }
+    string str,ch;
+    int lo,hi,x,y;
+    while(cin >> ch >> str){
+        if(str[0]=='0' && ch[0]=='0') break;
+            //cout<<ch<<" "<<str<<endl;
+        for(int i=0;i<500;i++){
+            x = check(ch,F[i]);
+
+            if(x) lo = i;
+            if(x==2) lo--;
+
+            y = check(str,F[i]);
+            //cout<<"xy: "<<x<<" "<<y<<endl;
+            if(y) hi = i;
+            else break;
+            //cout<<"lh: "<<lo<<" "<<hi<<endl;
+        }
+        if(ch[0]=='0') lo = 0;
+        cout<<hi-lo<<endl;
+    }
+    return 0;
+}
